@@ -12,6 +12,9 @@ var snakeY = blocksize * 10;
 var snakebody = [];
 var foodx;
 var foody;
+const foodsound = new Audio("sounds/food.wav");
+const gameoversound = new Audio("sounds/gameover.wav");
+const movesound = new Audio("sounds/game.wav");
 var gameover=false;
 var score =0;
 
@@ -27,21 +30,25 @@ window.onload = function () {
     document.addEventListener("keyup", changeDirection);
     setInterval(update, 1000 / 10);
    
+   
 }
 function update() {
     if(gameover==true){
+        gameoversound.play();
         return;
     }
     for(let i=0 ; i<snakebody.length;i++){
         if(snakeX==snakebody[i][0] && snakeY==snakebody[i][1]){
             gameover=true;
-            gameEl.innerHTML = "Game Over";
+            gameoversound.play();
+         alert( "Game Over");
         }
     }
 
     context.fillStyle = "black";
     context.fillRect(0, 0, board.width, board.height);
     if (snakeX == foodx && snakeY == foody) {
+        foodsound.play();
         snakebody.push([foodx, foody]);
         setfood();
     }
@@ -65,7 +72,8 @@ function update() {
     }
     if(snakeX<0 || snakeX>=board.width || snakeY<0 || snakeY>=board.height){
         gameover=true;
-        gameEl.textContent = "Game Over";
+        gameoversound.play();
+       alert("Game Over");
     }
 }
 function changeDirection(e) {
@@ -95,10 +103,11 @@ function setfood() {
     foody = Math.floor(Math.random() * rows) * blocksize;
 }
 function startgame() {
+    play.movesound();
     gameover=false;
     snakebody = [];
     snakeX = blocksize * 10;
-    snakeY = blocksize * 10;
+    snakeY = blocksize *10;
     velocityX = 0;
     velocityY = 0;
     score=0;
